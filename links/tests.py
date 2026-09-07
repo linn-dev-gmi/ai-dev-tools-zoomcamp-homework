@@ -178,6 +178,24 @@ class DashboardAccessTests(StoreTestCase):
         )
         self.assertIsNotNone(self.store.get_link(self.globex.id, "secret"))
 
+    def test_list_page_names_the_active_store(self):
+        self.make_link(self.acme, code="a1", url="https://acme.test/")
+        self.client.force_login(self.dana)
+
+        response = self.client.get("/app/acme/")
+
+        self.assertContains(response, "/acme/a1")
+        self.assertContains(response, "store: sqlite")
+
+    def test_stats_page_renders_for_a_member(self):
+        self.make_link(self.acme, code="a1")
+        self.store.record_click(self.acme.id, "a1", timezone.now(), "", "")
+        self.client.force_login(self.dana)
+
+        response = self.client.get("/app/acme/a1/stats/")
+
+        self.assertContains(response, "1 click total")
+
     def test_member_of_two_tenants_sees_both(self):
         Membership.objects.create(user=self.dana, tenant=self.globex)
         self.client.force_login(self.dana)
