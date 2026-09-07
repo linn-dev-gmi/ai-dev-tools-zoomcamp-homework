@@ -8,7 +8,8 @@ and click events live in MongoDB when it is configured, and fall back to SQLite
 when it is not, so the app runs with zero setup.
 
 Built for [AI Dev Tools Zoomcamp 2026](https://github.com/DataTalksClub/ai-dev-tools-zoomcamp),
-homework 1. The spec this was built from is in [`_docs/plan.md`](_docs/plan.md).
+homework 1. The spec this was built from is in [`_docs/plan.md`](_docs/plan.md), and
+the task breakdown is in [`backlog.md`](backlog.md).
 
 ## Features
 
