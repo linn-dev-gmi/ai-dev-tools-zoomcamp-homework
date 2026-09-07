@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}shortlink{% endblock %}</title>
+  <style>
+    :root { --bg:#f7f7f8; --fg:#1b1b1f; --muted:#6b6b76; --line:#e2e2e7; --accent:#3b5bdb; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--fg);
+           font:15px/1.55 ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; }
+    a { color: var(--accent); }
+    header { background:#fff; border-bottom:1px solid var(--line); }
+    .bar { max-width:900px; margin:0 auto; padding:.8rem 1.2rem;
+           display:flex; align-items:center; gap:1rem; }
+    .brand { font-weight:650; letter-spacing:-.01em; text-decoration:none; color:var(--fg); }
+    .spacer { flex:1; }
+    .muted { color:var(--muted); }
+    main { max-width:900px; margin:0 auto; padding:1.6rem 1.2rem 3rem; }
+    h1 { font-size:1.35rem; margin:0 0 1rem; letter-spacing:-.01em; }
+    .card { background:#fff; border:1px solid var(--line); border-radius:10px; padding:1.1rem; }
+    table { width:100%; border-collapse:collapse; }
+    th, td { text-align:left; padding:.6rem .5rem; border-bottom:1px solid var(--line);
+             vertical-align:top; }
+    th { font-size:.78rem; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); }
+    td.num { text-align:right; font-variant-numeric:tabular-nums; }
+    .btn { display:inline-block; background:var(--accent); color:#fff; border:0; cursor:pointer;
+           border-radius:7px; padding:.5rem .9rem; font:inherit; text-decoration:none; }
+    .btn.link { background:none; color:var(--muted); padding:.2rem .3rem; }
+    .btn.link:hover { color:#c92a2a; }
+    form.inline { display:inline; }
+    label { display:block; font-weight:550; margin:.9rem 0 .25rem; }
+    input { width:100%; padding:.5rem .6rem; border:1px solid var(--line);
+            border-radius:7px; font:inherit; background:#fff; }
+    .help, .errors { font-size:.85rem; }
+    .help { color:var(--muted); margin-top:.25rem; }
+    .errors { color:#c92a2a; margin-top:.25rem; }
+    .msg { background:#fff; border:1px solid var(--line); border-left:3px solid var(--accent);
+           border-radius:7px; padding:.6rem .8rem; margin-bottom:1rem; }
+    code { background:#ececf1; padding:.1rem .35rem; border-radius:4px; font-size:.9em; }
+    .pill { font-size:.72rem; text-transform:uppercase; letter-spacing:.05em;
+            border:1px solid var(--line); border-radius:99px; padding:.15rem .55rem;
+            color:var(--muted); }
+    .chart { display:flex; align-items:flex-end; gap:3px; height:140px;
+             border-bottom:1px solid var(--line); padding-top:.5rem; }
+    .chart div { flex:1; background:var(--accent); border-radius:2px 2px 0 0; min-height:1px;
+                 opacity:.85; }
+  </style>
+</head>
+<body>
+<header>
+  <div class="bar">
+    <a class="brand" href="{% url 'home' %}">shortlink</a>
+    {% if user.is_authenticated %}
+      {% for t in user_tenants %}
+        <a href="{% url 'link_list' t.slug %}">{{ t.slug }}</a>
+      {% endfor %}
+      <span class="spacer"></span>
+      <span class="muted">{{ user.username }}</span>
+      <form class="inline" method="post" action="{% url 'logout' %}">{% csrf_token %}
+        <button class="btn link" type="submit">Sign out</button>
+      </form>
+    {% else %}
+      <span class="spacer"></span>
+      <a href="{% url 'login' %}">Sign in</a>
+    {% endif %}
+  </div>
+</header>
+<main>
+  {% for message in messages %}<div class="msg">{{ message }}</div>{% endfor %}
+  {% block content %}{% endblock %}
+</main>
+</body>
+</html>

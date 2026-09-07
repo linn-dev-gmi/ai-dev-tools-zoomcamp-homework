@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+{% if user.is_authenticated %}
+  <h1>Your workspaces</h1>
+  <div class="card">
+    {% for t in tenants %}
+      <p><a href="{% url 'link_list' t.slug %}">{{ t.name }}</a> <code>/{{ t.slug }}/</code></p>
+    {% empty %}
+      <p class="muted">You are not a member of any workspace yet. An admin can add you.</p>
+    {% endfor %}
+  </div>
+{% else %}
+  <h1>shortlink</h1>
+  <div class="card">
+    <p>Multitenant URL shortener. <a href="{% url 'login' %}">Sign in</a> to manage links.</p>
+  </div>
+{% endif %}
+{% endblock %}

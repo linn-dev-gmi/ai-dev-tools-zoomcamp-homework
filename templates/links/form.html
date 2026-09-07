@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}New link{% endblock %}
+{% block content %}
+<h1>New link</h1>
+<div class="card" style="max-width:32rem">
+  <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {{ field }}
+      {% if field.help_text %}<div class="help">{{ field.help_text }}</div>{% endif %}
+      {% for error in field.errors %}<div class="errors">{{ error }}</div>{% endfor %}
+    {% endfor %}
+    <p style="margin-top:1.2rem">
+      <button class="btn" type="submit">Create</button>
+      <a class="btn link" href="{% url 'link_list' request.tenant.slug %}">Cancel</a>
+    </p>
+  </form>
+</div>
+{% endblock %}

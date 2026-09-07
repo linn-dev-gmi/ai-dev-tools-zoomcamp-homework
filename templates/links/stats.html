@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}/{{ request.tenant.slug }}/{{ link.code }}{% endblock %}
+{% block content %}
+<h1>/{{ request.tenant.slug }}/{{ link.code }}</h1>
+<p class="muted">
+  goes to <a href="{{ link.target_url }}">{{ link.target_url|truncatechars:70 }}</a><br>
+  {{ total }} click{{ total|pluralize }} total{% if link.expires_at %} &middot; expires {{ link.expires_at|date:"Y-m-d H:i" }}{% endif %}
+</p>
+<div class="card">
+  <strong>Last {{ days }} days</strong> <span class="muted">&middot; peak {{ peak }}/day</span>
+  <div class="chart">
+    {% for point in series %}
+      <div style="height:{{ point.height }}%" title="{{ point.day }}: {{ point.count }}"></div>
+    {% endfor %}
+  </div>
+  <div class="muted" style="display:flex; justify-content:space-between; font-size:.8rem; margin-top:.4rem">
+    <span>{{ first_day }}</span>
+    <span>{{ last_day }}</span>
+  </div>
+</div>
+<p style="margin-top:1rem">
+  <a href="{% url 'link_list' request.tenant.slug %}">&larr; back to links</a>
+</p>
+{% endblock %}
